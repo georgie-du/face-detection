@@ -1,1 +1,3 @@
 # face-detection
+
+Procesarea Imaginilor 
