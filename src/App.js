@@ -14,6 +14,7 @@ function App() {
   const lastDetectionsRec = useRef([]);
   const recorderRef = useRef(null);
 
+
   useEffect(() => {
     async function setup() {
       startButton.current.setAttribute("disabled", true);
@@ -24,14 +25,15 @@ function App() {
             audio: true,
             video: true
           });
+          // console.log('Got MediaStream:', stream);
           window.stream = stream;
           videoRef.current.srcObject = stream;
+          //load coco detaset model and assign to reference
           const model = await cocoSsd.load();
-
           modelRef.current = model;
           startButton.current.removeAttribute("disabled");
         } catch (error) {
-          console.error(error);
+          console.error('Error accessing media devices.', error);
         }
       }
     }
@@ -43,16 +45,21 @@ function App() {
       stopRec();
       return;
     }
-
+    //detect person in the video
     const predictions = await modelRef.current.detect(videoRef.current);
 
     let foundPerson = false;
     for (let i = 0; i < predictions.length; i++) {
       if (predictions[i].class === "person") {
         foundPerson = true;
+        console.log(predictions[i]);
       }
+      // else{
+      // print object detected in console
+      //   console.log(predictions[i]);
+      // }
     }
-
+    //start/stop recording if person detected
     if (foundPerson) {
       startRec();
       lastDetectionsRec.current.push(true);
@@ -62,11 +69,11 @@ function App() {
     } else {
       stopRec();
     }
-
+    console.log(lastDetectionsRec.current);
     lastDetectionsRec.current = lastDetectionsRec.current.slice(
-      Math.max(lastDetectionsRec.current.length - 10, 0)
+      Math.max(lastDetectionsRec.current.length - 9, 0)
     );
-    //update animation before next repaint(60 times/sec)
+    //update animation frame before next repaint(60 times/sec)
     requestAnimationFrame(() => {
       detectFrame();
     });
@@ -153,7 +160,7 @@ function App() {
                 <div className="card mt-3 w-70" key={record.dateTitle} style={{ backgroundColor: "#282c34" }}>
                   <div className="card-body p-3 w-100">
                     <p className="card-dateTitle text-muted small">{record.dateTitle}</p>
-                    <video width="630" className="rounded d-flex justify-content-center m-auto" controls src={record.href} download={record.href} ></video>
+                    <video width="630" className="rounded d-flex justify-content-center m-auto" poster="https://www.israel21c.org/wp-content/uploads/2020/04/shutterstock_731158624-768x432.jpg" controls src={record.href} download={record.href} ></video>
                   </div>
                 </div>
               );
