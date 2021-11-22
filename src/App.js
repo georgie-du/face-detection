@@ -117,55 +117,53 @@ function App() {
     <div className="py-3 App-header">
       <h3 className="card-header p-3 my-4 w-100 text-center h3">Face detection surveillance camera</h3>
       <div>
-        <video className="rounded" autoPlay playsInline muted ref={videoRef} />
+        <video style={{ width: "550px", height: "350px" }} className="rounded" autoPlay playsInline muted ref={videoRef} />
       </div>
-      <div>
-        <div class="btn-toolbar d-flex justify-content-center p-3" role="toolbar">
-          <div className="btn-group mr-2" role="group">
-            <button
-              className="btn btn-warning"
-              onClick={() => {
-                startRecRef.current = true;
-                stopButton.current.removeAttribute("disabled");
-                startButton.current.setAttribute("disabled", true);
-                detectFrame();
-              }}
-              ref={startButton}
-            >
-              Start
-            </button>
-          </div>
-          <div className="btn-group mr-2" role="group">
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                startRecRef.current = false;
-                startButton.current.removeAttribute("disabled");
-                stopButton.current.setAttribute("disabled", true);
-                stopRec();
-              }}
-              ref={stopButton}
-            >
-              Stop
-            </button>
-          </div>
+      <div class="btn-toolbar d-flex justify-content-center p-3" role="toolbar">
+        <div className="btn-group mr-2" role="group">
+          <button
+            className="btn btn-warning"
+            onClick={() => {
+              startRecRef.current = true;
+              stopButton.current.removeAttribute("disabled");
+              startButton.current.setAttribute("disabled", true);
+              detectFrame();
+            }}
+            ref={startButton}
+          >
+            Start
+          </button>
         </div>
+        <div className="btn-group mr-2" role="group">
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              startRecRef.current = false;
+              startButton.current.removeAttribute("disabled");
+              stopButton.current.setAttribute("disabled", true);
+              stopRec();
+            }}
+            ref={stopButton}
+          >
+            Stop
+          </button>
+        </div>
+      </div>
 
-        <div className="card-header text-center my-5 h3 ">Video recordings:</div>
-        <div className="row container m-0 p-3 w-100 d-flex justify-content-center">
-          {!recordings.length
-            ? null
-            : recordings.map(record => {
-              return (
-                <div className="card mt-3 w-70" key={record.dateTitle} style={{ backgroundColor: "#282c34" }}>
-                  <div className="card-body p-3 w-100">
-                    <p className="card-dateTitle text-muted small">{record.dateTitle}</p>
-                    <video width="630" className="rounded d-flex justify-content-center m-auto" poster="https://www.israel21c.org/wp-content/uploads/2020/04/shutterstock_731158624-768x432.jpg" controls src={record.href} download={record.href} ></video>
-                  </div>
+      <div className="card-header text-center my-5 h3 w-100 ">Video recordings:</div>
+      <div className="row container-fluid m-0 w-100 d-flex justify-content-center">
+        {!recordings.length
+          ? null
+          : recordings.map(record => {
+            return (
+              <div className="card m-3 " key={record.dateTitle} style={{ backgroundColor: "#282c34" }}>
+                <div className="card-body p-3 m-0 justify-content-center">
+                  <p className="card-dateTitle text-muted small">{record.dateTitle}</p>
+                  <video style={{ width: "500px", height: "350px" }} className="rounded d-flex justify-content-center m-auto" poster="https://www.israel21c.org/wp-content/uploads/2020/04/shutterstock_731158624-768x432.jpg" controls src={record.href} download={record.href} ></video>
                 </div>
-              );
-            })}
-        </div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
