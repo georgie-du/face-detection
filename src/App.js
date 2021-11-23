@@ -14,7 +14,6 @@ function App() {
   const lastDetectionsRec = useRef([]);
   const recorderRef = useRef(null);
 
-
   useEffect(() => {
     async function setup() {
       startButton.current.setAttribute("disabled", true);
@@ -52,12 +51,9 @@ function App() {
     for (let i = 0; i < predictions.length; i++) {
       if (predictions[i].class === "person") {
         foundPerson = true;
-        console.log(predictions[i]);
+        // console.log(predictions[i].class);
       }
-      // else{
-      // print object detected in console
-      //   console.log(predictions[i]);
-      // }
+      console.log(predictions[i].class);
     }
     //start/stop recording if person detected
     if (foundPerson) {
@@ -69,11 +65,11 @@ function App() {
     } else {
       stopRec();
     }
-    console.log(lastDetectionsRec.current);
+    // console.log(lastDetectionsRec.current);
     lastDetectionsRec.current = lastDetectionsRec.current.slice(
       Math.max(lastDetectionsRec.current.length - 9, 0)
     );
-    //update animation frame before next repaint(60 times/sec)
+    //update animation frame before next repaint(60 frames/sec)
     requestAnimationFrame(() => {
       detectFrame();
     });
@@ -86,14 +82,12 @@ function App() {
 
     recordingRef.current = true;
     console.log("start recording");
-
     recorderRef.current = new MediaRecorder(window.stream);
+
     // timestamp
     recorderRef.current.ondataavailable = function (e) {
       const dateTitle = (new Date().toUTCString());
-      console.log(dateTitle);
       const href = URL.createObjectURL(e.data);
-      console.log(href);
       setRecordings(previousRecords => {
         return [...previousRecords, { href, dateTitle }];
       });
@@ -106,7 +100,6 @@ function App() {
     if (!recordingRef.current) {
       return;
     }
-
     recordingRef.current = false;
     recorderRef.current.stop();
     console.log("stopped recording");
@@ -126,7 +119,7 @@ function App() {
             onClick={() => {
               startRecRef.current = true;
               stopButton.current.removeAttribute("disabled");
-              startButton.current.setAttribute("disabled", true);
+              startButton.current.setAttribute("disabled", "disabled");
               detectFrame();
             }}
             ref={startButton}
@@ -140,7 +133,7 @@ function App() {
             onClick={() => {
               startRecRef.current = false;
               startButton.current.removeAttribute("disabled");
-              stopButton.current.setAttribute("disabled", true);
+              stopButton.current.setAttribute("disabled", "disabled");
               stopRec();
             }}
             ref={stopButton}
